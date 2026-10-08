@@ -64,6 +64,14 @@ header{position:sticky;top:0;z-index:10;background:var(--white);border-bottom:1p
 .panel li:last-child{border:0}
 .panel strong{color:var(--blue)}
 
+/* ===== FORM PEMESANAN (di dalam kotak putih hero) ===== */
+.panel label{display:block;font-weight:700;font-size:.9rem;margin:12px 0 5px}
+.panel input,.panel select,.panel textarea{width:100%;padding:11px 13px;border:1.5px solid #c5d6e0;border-radius:10px;font:inherit;color:var(--navy);background:var(--white)}
+.panel textarea{resize:vertical;min-height:70px}
+.panel input:focus,.panel select:focus,.panel textarea:focus{outline:3px solid var(--sun);border-color:var(--blue)}
+.panel .btn{width:100%;margin-top:18px;border:0;cursor:pointer;font:inherit;font-weight:700}
+.note{margin-top:12px;font-size:.85rem;color:var(--muted);text-align:center}
+
 /* ===== 6. KARTU (dipakai untuk layanan, keunggulan, harga) ===== */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .card{background:var(--white);border:1px solid #dbe6ec;border-radius:var(--radius);padding:26px}
@@ -144,14 +152,34 @@ footer.site{background:var(--navy);color:#a9bccb;padding:32px 0;text-align:cente
         <a class="btn btn-line" href="tel:+6281234567890">Telepon sekarang</a>
       </div>
     </div>
+    <!-- FORM PEMESANAN: id="form-pesan" dipakai oleh JavaScript di bagian bawah file -->
     <div class="panel">
-      <h3>Yang Anda dapatkan</h3>
-      <ul>
-        <li><span>Waktu tiba</span><strong>30–60 menit</strong></li>
-        <li><span>Layanan</span><strong>24 jam</strong></li>
-        <li><span>Garansi sedot</span><strong>7 hari</strong></li>
-        <li><span>Biaya survei</span><strong>Gratis</strong></li>
-      </ul>
+      <h3>Pesan sekarang</h3>
+      <form id="form-pesan">
+        <label for="nama">Nama</label>
+        <input id="nama" name="nama" type="text" placeholder="Contoh: Budi" required>
+
+        <label for="hp">Nomor HP</label>
+        <input id="hp" name="hp" type="tel" inputmode="tel" placeholder="Contoh: 0812xxxxxxx" required>
+
+        <label for="layanan">Layanan</label>
+        <select id="layanan" name="layanan" required>
+          <option value="">Pilih layanan</option>
+          <option>Sedot WC</option>
+          <option>Sedot septic tank</option>
+          <option>Atasi saluran mampet</option>
+          <option>Cek dan survei</option>
+        </select>
+
+        <label for="alamat">Alamat lengkap</label>
+        <textarea id="alamat" name="alamat" placeholder="Jalan, nomor rumah, kelurahan, patokan" required></textarea>
+
+        <label for="catatan">Catatan (boleh dikosongkan)</label>
+        <input id="catatan" name="catatan" type="text" placeholder="Contoh: WC meluap, mohon cepat">
+
+        <button type="submit" class="btn btn-main">Kirim ke WhatsApp</button>
+      </form>
+      <p class="note">Survei gratis · Garansi 7 hari · Buka 24 jam</p>
     </div>
   </div>
 </div>
@@ -259,5 +287,31 @@ footer.site{background:var(--navy);color:#a9bccb;padding:32px 0;text-align:cente
 
 <a class="wa" href="https://wa.me/6281234567890" aria-label="Chat WhatsApp">💬 Chat</a>
 
+<script>
+/* ===== KIRIM FORM KE WHATSAPP =====
+   Cara kerja: saat tombol ditekan, JavaScript mengambil isi form,
+   menyusunnya menjadi satu pesan, lalu membuka WhatsApp dengan pesan itu. */
+
+// GANTI dengan nomor WhatsApp Anda (62 tanpa 0 di depan)
+const NOMOR_WA = "6281234567890";
+
+document.getElementById("form-pesan").addEventListener("submit", function (e) {
+  e.preventDefault();              // cegah halaman reload
+
+  const f = e.target;              // f = form yang sedang dikirim
+  const pesan =
+    "Halo, saya mau pesan layanan sedot WC.\n\n" +
+    "Nama: " + f.nama.value.trim() + "\n" +
+    "No. HP: " + f.hp.value.trim() + "\n" +
+    "Layanan: " + f.layanan.value + "\n" +
+    "Alamat: " + f.alamat.value.trim() + "\n" +
+    "Catatan: " + (f.catatan.value.trim() || "-");
+
+  // encodeURIComponent mengubah teks agar aman dipakai di dalam link
+  const url = "https://wa.me/" + NOMOR_WA + "?text=" + encodeURIComponent(pesan);
+
+  window.open(url, "_blank");      // buka WhatsApp di tab baru
+});
+</script>
 </body>
 </html>
