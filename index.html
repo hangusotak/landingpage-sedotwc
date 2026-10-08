@@ -65,9 +65,12 @@ header{position:sticky;top:0;z-index:10;background:var(--white);border-bottom:1p
 .panel strong{color:var(--blue)}
 
 /* ===== FORM PEMESANAN (di dalam kotak putih hero) ===== */
-.panel label{display:block;font-weight:700;font-size:.9rem;margin:12px 0 5px}
-.panel input,.panel select,.panel textarea{width:100%;padding:11px 13px;border:1.5px solid #c5d6e0;border-radius:10px;font:inherit;color:var(--navy);background:var(--white)}
-.panel textarea{resize:vertical;min-height:70px}
+.panel form{padding:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}  /* dua kolom berdampingan */
+.panel label{display:block;font-weight:700;font-size:.85rem;margin:10px 0 4px}
+.panel input,.panel select,.panel textarea{width:100%;padding:9px 12px;border:1.5px solid #c5d6e0;border-radius:10px;font:inherit;font-size:.95rem;color:var(--navy);background:var(--white)}
+.panel textarea{resize:vertical;min-height:58px}
+.panel h3{margin-bottom:4px}
 .panel input:focus,.panel select:focus,.panel textarea:focus{outline:3px solid var(--sun);border-color:var(--blue)}
 .panel .btn{width:100%;margin-top:18px;border:0;cursor:pointer;font:inherit;font-weight:700}
 .note{margin-top:12px;font-size:.85rem;color:var(--muted);text-align:center}
@@ -116,6 +119,9 @@ footer.site{background:var(--navy);color:#a9bccb;padding:32px 0;text-align:cente
   section{padding:52px 0}
   .hero{padding:52px 0}
 }
+@media (max-width:480px){
+  .row{grid-template-columns:1fr}  /* HP kecil: kolom form bertumpuk lagi */
+}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
 </style>
 </head>
@@ -156,26 +162,39 @@ footer.site{background:var(--navy);color:#a9bccb;padding:32px 0;text-align:cente
     <div class="panel">
       <h3>Pesan sekarang</h3>
       <form id="form-pesan">
-        <label for="nama">Nama</label>
-        <input id="nama" name="nama" type="text" placeholder="Contoh: Budi" required>
+        <!-- Baris 1: Nama dan Nomor HP berdampingan -->
+        <div class="row">
+          <div>
+            <label for="nama">Nama</label>
+            <input id="nama" name="nama" type="text" placeholder="Contoh: Budi" required>
+          </div>
+          <div>
+            <label for="hp">Nomor HP</label>
+            <input id="hp" name="hp" type="tel" inputmode="tel" placeholder="0812xxxxxxx" required>
+          </div>
+        </div>
 
-        <label for="hp">Nomor HP</label>
-        <input id="hp" name="hp" type="tel" inputmode="tel" placeholder="Contoh: 0812xxxxxxx" required>
+        <!-- Baris 2: Layanan dan Catatan berdampingan -->
+        <div class="row">
+          <div>
+            <label for="layanan">Layanan</label>
+            <select id="layanan" name="layanan" required>
+              <option value="">Pilih layanan</option>
+              <option>Sedot WC</option>
+              <option>Sedot septic tank</option>
+              <option>Atasi saluran mampet</option>
+              <option>Cek dan survei</option>
+            </select>
+          </div>
+          <div>
+            <label for="catatan">Catatan (opsional)</label>
+            <input id="catatan" name="catatan" type="text" placeholder="Contoh: WC meluap">
+          </div>
+        </div>
 
-        <label for="layanan">Layanan</label>
-        <select id="layanan" name="layanan" required>
-          <option value="">Pilih layanan</option>
-          <option>Sedot WC</option>
-          <option>Sedot septic tank</option>
-          <option>Atasi saluran mampet</option>
-          <option>Cek dan survei</option>
-        </select>
-
+        <!-- Baris 3: Alamat selebar penuh -->
         <label for="alamat">Alamat lengkap</label>
         <textarea id="alamat" name="alamat" placeholder="Jalan, nomor rumah, kelurahan, patokan" required></textarea>
-
-        <label for="catatan">Catatan (boleh dikosongkan)</label>
-        <input id="catatan" name="catatan" type="text" placeholder="Contoh: WC meluap, mohon cepat">
 
         <button type="submit" class="btn btn-main">Kirim ke WhatsApp</button>
       </form>
